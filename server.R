@@ -29,9 +29,9 @@ server <- function(input, output, session) {
 
   # Simple server stuff goes here ------------------------------------------------------------
   reactiveRevBal <- reactive({
-    dfRevBal %>% filter(
+    dfProgressH %>% filter(
       area_name == input$selectArea | area_name == "England",
-      school_phase == input$selectPhase
+      data_type == input$selectPhase
     )
   })
 
@@ -43,10 +43,10 @@ server <- function(input, output, session) {
   })
 
   reactiveBenchmark <- reactive({
-    dfRevBal %>%
+    dfProgressH %>%
       filter(
         area_name %in% c(input$selectArea, input$selectBenchLAs),
-        school_phase == input$selectPhase,
+        data_type == input$selectPhase,
         year == max(year)
       )
   })
@@ -82,7 +82,7 @@ server <- function(input, output, session) {
       paste0("£", format((reactiveRevBal() %>% filter(
         year == max(year),
         area_name == input$selectArea,
-        school_phase == input$selectPhase
+        data_type == input$selectPhase
       ))$average_revenue_balance,
       big.mark = ","
       )),
@@ -95,12 +95,12 @@ server <- function(input, output, session) {
     latest <- (reactiveRevBal() %>% filter(
       year == max(year),
       area_name == input$selectArea,
-      school_phase == input$selectPhase
+      data_type == input$selectPhase
     ))$average_revenue_balance
     penult <- (reactiveRevBal() %>% filter(
       year == max(year) - 1,
       area_name == input$selectArea,
-      school_phase == input$selectPhase
+      data_type == input$selectPhase
     ))$average_revenue_balance
 
     # Put value into box to plug into app
@@ -123,7 +123,7 @@ server <- function(input, output, session) {
   output$download_data <- downloadHandler(
     filename = "shiny_template_underlying_data.csv",
     content = function(file) {
-      write.csv(dfRevBal, file)
+      write.csv(dfProgressH, file)
     }
   )
 
