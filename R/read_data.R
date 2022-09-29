@@ -20,7 +20,7 @@ funcReadData <- function(file){
            institution_type=='Total') %>%
     mutate(area_name=case_when(geographic_level=='National' ~ country_name,
                                geographic_level=='Regional' ~ region_name,
-                               17
+                              
                                TRUE ~ la_name))
   return(dfData)
 }
